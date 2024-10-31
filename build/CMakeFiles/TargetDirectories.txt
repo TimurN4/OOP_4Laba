@@ -1,3 +1,3 @@
-/home/timurnogaev/unix-shell-and-utils-TimurN4/OOP/build/CMakeFiles/MyProject.dir
+/home/timurnogaev/unix-shell-and-utils-TimurN4/OOP/build/CMakeFiles/try.dir
 /home/timurnogaev/unix-shell-and-utils-TimurN4/OOP/build/CMakeFiles/edit_cache.dir
 /home/timurnogaev/unix-shell-and-utils-TimurN4/OOP/build/CMakeFiles/rebuild_cache.dir

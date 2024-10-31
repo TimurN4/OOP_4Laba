@@ -22,9 +22,22 @@ class rectangle : public figure<T>{
         point<T> get_center() const;
         operator double() const;
 
-        template <scalar_type C>
-        friend std::istream& operator>>(std::istream& is, rectangle<C>& f);
-        friend std::ostream& operator<<(std::ostream& os, const rectangle<C>& figure);
+        //template <scalar_type C>
+        friend std::istream& operator>>(std::istream& is, rectangle& f) {
+            point<T> coordinats[4];
+            is >> coordinats[0] >> coordinats[1] >> coordinats[2] >> coordinats[3];
+            if(is.fail()) {
+                throw std::invalid_argument("input fail");
+            }
+            f = rectangle(coordinats[0], coordinats[1], coordinats[2], coordinats[3]);
+            return is;
+        }
+
+        friend std::ostream& operator<<(std::ostream& os, const rectangle& figure) {
+            os << "coordinates of rectangle\n";
+            os << *figure.a << std::endl << *figure.b << std::endl << *figure.c << std::endl << *figure.d << std:: endl;
+            return os;
+        }
 
         bool valid_rectangle() const;
     private : 
@@ -64,7 +77,7 @@ rectangle<T>::rectangle(const point<T>& x, const point<T>& y, const point<T>& z,
     b = std::make_unique<point<T>>(std::move(y));
     c = std::make_unique<point<T>>(std::move(z));
     d = std::make_unique<point<T>>(std::move(w));
-    valid_square();
+    valid_rectangle();
 }
 
 template<scalar_type T>
@@ -95,7 +108,7 @@ bool rectangle<T>::operator==(const figure<T> &other_rectangle) const {
     if(!trey) {
         return false;
     }
-    if(*this->a == *other_rectangle.a && *this->b == *other_rectangle.b && *this->c == *other_rectangle.c && *this->d = *other_rectangle.d) {
+    if(*a == *other_rectangle.a && *b == *other_rectangle.b && *c == *other_rectangle.c && *d = *other_rectangle.d) {
         return true;
     }
     return false;
@@ -109,39 +122,39 @@ void rectangle<T>::get_points_of_figure() const{
 
 template<scalar_type T>
 point<T> rectangle<T>::get_center() const{
-    double x_centre = (*this->a._x + *this->c._x) / 2;
-    double y_centre = (*this->a._y + *this->c._y) / 2;
+    double x_centre = (a->_x + c->_x) / 2;
+    double y_centre = (a->_y + c->_y) / 2;
 
     return point<T>{x_centre, y_centre};
 }
 
 template <scalar_type T>
 rectangle<T>::operator double() const {
-    double storona1 = sqrt(pow(*this->a._x - *this->b._x, 2) + pow(*this->a._y - *this->b._y, 2));
-    double storona2 = sqrt(pow(*this->b._x - *this->c._x, 2) + pow(*this->b._y - *this->c._y, 2))
+    double storona1 = sqrt(pow(a->_x - b->_x, 2) + pow(a->_y - b->_y, 2));
+    double storona2 = sqrt(pow(b->_x - c->_x, 2) + pow(b->_y - c->_y, 2));
     return storona1 * storona2;
 }
 
-template<scalar_type T>
-std::istream& operator>>(std::istream& is, rectangle<T>& f) {
-    point<T> coordinats[4];
-    is >> coordinats[0] >> coordinats[1] >> coordinats[2] >> coordinats[3];
-    if(is.fail()) {
-        throw std::invalid_argument("input fail");
-    }
-    this->a = std::make_unique<point<T>>(coordinats[0]);
-    this->b = std::make_unique<point<T>>(coordinats[1]);
-    this->c = std::make_unique<point<T>>(coordinats[2]);
-    this->d = std::make_unique<point<T>>(coordinats[3]);
-    return is;
-}
+// template<scalar_type T>
+// std::istream& operator>>(std::istream& is, rectangle<T>& f) {
+//     point<T> coordinats[4];
+//     is >> coordinats[0] >> coordinats[1] >> coordinats[2] >> coordinats[3];
+//     if(is.fail()) {
+//         throw std::invalid_argument("input fail");
+//     }
+//     a = std::make_unique<point<T>>(coordinats[0]);
+//     b = std::make_unique<point<T>>(coordinats[1]);
+//     c = std::make_unique<point<T>>(coordinats[2]);
+//     d = std::make_unique<point<T>>(coordinats[3]);
+//     return is;
+// }
 
-template<scalar_type T>
-std::ostream& operator<<(std::ostream& os, const rectangle<T>& figure) {
-    os << "coordinates of rectangle\n";
-    for(int i = 0; i < 4; ++i) {
-        os << figure.points[i];
-    }
-    os << *this->a << std::endl << *this->b << std::endl << *this->c << std::endl << *this->d << std:: endl;
-    return os;
-}
+// template<scalar_type T>
+// std::ostream& operator<<(std::ostream& os, const rectangle<T>& figure) {
+//     os << "coordinates of rectangle\n";
+//     for(int i = 0; i < 4; ++i) {
+//         os << figure.points[i];
+//     }
+//     os << *a << std::endl << *b << std::endl << *c << std::endl << *d << std:: endl;
+//     return os;
+// }

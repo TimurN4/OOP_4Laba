@@ -1,4 +1,4 @@
-CMakeFiles/MyProject.dir/main.cpp.o: \
+CMakeFiles/try.dir/main.cpp.o: \
  /home/timurnogaev/unix-shell-and-utils-TimurN4/OOP/main.cpp \
  /usr/include/stdc-predef.h /usr/include/c++/10/iostream \
  /usr/include/x86_64-linux-gnu/c++/10/bits/c++config.h \

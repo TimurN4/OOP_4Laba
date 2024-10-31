@@ -14,9 +14,17 @@ class point {
 
         bool operator==(const point<T>& p);
         // bool operator!=(const point& p);
-        template<scalar_type C>
-        friend std::istream& operator>>(std::istream& is, point<C>& point);
-        friend std::ostream& operator<<(std::ostream& os, const point<C>& point);
+        //template<scalar_type C>
+        friend std::istream& operator>>(std::istream& is, point<T>& point) {
+            std::cout << "Вводи координаты точки\n";
+            is >> point._x >> point._y;
+            return is;
+        }
+
+        friend std::ostream& operator<<(std::ostream& os, const point<T>& point) {
+            os << "( " << point._x << ":" << point._y << " )\n";
+            return os;
+        }
 };
 
 template<scalar_type T>
@@ -30,15 +38,15 @@ bool point<T>::operator==(const point<T>& p) {
     return (this->_x == p._x && this->_y == p._y);
 }
 
-template<scalar_type T>
-std::istream& operator>>(std::istream& is, point<T>& point) {
-    std::cout << "Вводи координаты точки\n";
-    is >> point._x >> point._y;
-    return is;
-}
+// template<scalar_type T>
+// std::istream& operator>>(std::istream& is, point<T>& point) {
+//     std::cout << "Вводи координаты точки\n";
+//     is >> point._x >> point._y;
+//     return is;
+// }
 
-template<scalar_type T>
-std::ostream& operator<<(std::ostream& os, const point<T>& point) {
-    os << "( " << point._x << ":" << point._y << " )\n";
-    return os;
-}
+// template<scalar_type T>
+// std::ostream& operator<<(std::ostream& os, const point<T>& point) {
+//     os << "( " << point._x << ":" << point._y << " )\n";
+//     return os;
+// }

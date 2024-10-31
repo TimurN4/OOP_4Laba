@@ -13,15 +13,33 @@ class triangle : public figure<T>{
 
         triangle<T> &operator=(const triangle &other_triangle);
         triangle<T> &operator=(const triangle &&other_triangle) noexcept;
+
+        //не хватало копирования и перемещения 
+        triangle(const triangle<T> &other_triangle);
+        triangle(const triangle<T> &&other_triangle);
+
         bool operator==(const figure<T> &other_triangle) const;
 
         void get_points_of_figure() const;
         point<T> get_center() const;
         operator double() const;
 
-        template <scalar_type C>
-        friend std::istream& operator>>(std::istream& is, triangle<C>& f);
-        friend std::ostream& operator<<(std::ostream& os, const triangle<C>& figure);
+        //template <scalar_type C>
+        friend std::istream& operator>>(std::istream& is, triangle& f) {
+            point<T> coordinats[3];
+            is >> coordinats[0] >> coordinats[1] >> coordinats[2];
+            if (is.fail()) {
+                throw std::invalid_argument("input fail");
+            }
+            f = triangle(coordinats[0], coordinats[1], coordinats[2]);
+            return is;
+        }
+
+        friend std::ostream& operator<<(std::ostream& os, const triangle& figure) {
+            os << "coordinates of triangle\n";
+            os << *figure.a << std::endl << *figure.b << std::endl << *figure.c << std::endl;
+            return os;
+        }
 
         bool valid_triangle() const;
     private : 
@@ -30,6 +48,29 @@ class triangle : public figure<T>{
         std::unique_ptr<point<T>> c;
 };
 
+//Копирование 
+template<scalar_type T>
+triangle<T>::triangle(const triangle<T> &other_triangle) {
+    if(this != &other_triangle) {
+        a = std::make_unique<point<T>>(*other_triangle.a);
+        b = std::make_unique<point<T>>(*other_triangle.b);
+        c = std::make_unique<point<T>>(*other_triangle.c);
+    }
+    //return *this;
+}
+
+template<scalar_type T>
+triangle<T>::triangle(const triangle<T> &&other_triangle) {
+    if(this != &other_triangle) {
+        a = std::move(*other_triangle.a);
+        b = std::move(*other_triangle.b);
+        c = std::move(*other_triangle.c);
+    }
+    //return *this;
+}
+
+
+
 
 template<scalar_type T>
 static double distance(const point<T>& p1, const point<T>& p2) {
@@ -37,7 +78,7 @@ static double distance(const point<T>& p1, const point<T>& p2) {
 }
 
 template<scalar_type T>
-bool triangle<T>::valid_triangle() const { // y = kx + b
+bool triangle<T>::valid_triangle() const { 
     double side_0_1 = distance(*a, *b);
     double side_1_2 = distance(*b, *c);
     double side_2_0 = distance(*c, *a);
@@ -60,7 +101,7 @@ triangle<T>::triangle(const point<T>& x, const point<T>& y, const point<T>& z) {
 
 template<scalar_type T>
 triangle<T> &triangle<T>::operator=(const triangle<T> &other_triangle) {
-    if(this != other_triangle) {
+    if(this != &other_triangle) {
         a = std::make_unique<point<T>>(*other_triangle.a);
         b = std::make_unique<point<T>>(*other_triangle.b);
         c = std::make_unique<point<T>>(*other_triangle.c);
@@ -70,7 +111,7 @@ triangle<T> &triangle<T>::operator=(const triangle<T> &other_triangle) {
 
 template <scalar_type T>
 triangle<T> &triangle<T>::operator=(const triangle &&other_triangle) noexcept{
-    if(this != other_triangle) {
+    if(this != &other_triangle) {
         a = std::move(*other_triangle.a);
         b = std::move(*other_triangle.b);
         c = std::move(*other_triangle.c);
@@ -84,7 +125,10 @@ bool triangle<T>::operator==(const figure<T> &other_triangle) const {
     if(!trey) {
         return false;
     }
-    if(*this->a == *other_triangle.a && *this->b == *other_triangle.b && *this->c == *other_triangle.c) {
+    // if(*this->a == *other_triangle.a && *this->b == *other_triangle.b && *this->c == *other_triangle.c) {
+    //     return true;
+    // }
+    if(*a == *trey->a && *b == *trey->b && *c == *trey->c) {
         return true;
     }
     return false;
@@ -98,40 +142,41 @@ void triangle<T>::get_points_of_figure() const{
 
 template<scalar_type T>
 point<T> triangle<T>::get_center() const{
-    double x_centre = (*this->a._x + *this->b._x + *this->c._x) / 3;
-    double y_centre = (*this->a._y + *this->b._y + *this->c._y) / 3;
-
+    // double x_centre = (*this->a._x + *this->b._x + *this->c._x) / 3;
+    // double y_centre = (*this->a._y + *this->b._y + *this->c._y) / 3;
+    double x_centre = (a->_x + b->_x + c->_x) / 3;
+    double y_centre = (a->_y + b->_y + c->_y) / 3;
     return point<T>{x_centre, y_centre};
 }
 
 template <scalar_type T>
 triangle<T>::operator double() const {
-    double storona1 = sqrt(pow(*this->a._x - *this->b._x, 2) + pow(*this->a._y - *this->b._y, 2));
-    double storona2 = sqrt(pow(*this->b._x - *this->c._x, 2) + pow(*this->b._y - *this->c._y, 2));
-    double storona3 = sqrt(pow(*this->c._x - *this->a._x, 2) + pow(*this->c._y - *this->a._y, 2));
-    double polyperimetr = (storona1 + storona2 + storona3) / 2;
-    return sqrt(polyperimetr * (polyperimetr - storona1) * (polyperimetr - storona2) * (polyperimetr - storona3));
+    double side1 = distance(*a, *b);
+    double side2 = distance(*b, *c);
+    double side3 = distance(*c, *a);
+    double half_of_perimetr = (side1 + side2 + side3) / 2;
+    return sqrt(half_of_perimetr * (half_of_perimetr - side1) * (half_of_perimetr - side2) * (half_of_perimetr - side3));
 }
 
-template<scalar_type T>
-std::istream& operator>>(std::istream& is, triangle<T>& f) {
-    point<T> coordinats[3];
-    is >> coordinats[0] >> coordinats[1] >> coordinats[2];
-    if(is.fail()) {
-        throw std::invalid_argument("input fail");
-    }
-    this->a = std::make_unique<point<T>>(coordinats[0]);
-    this->b = std::make_unique<point<T>>(coordinats[1]);
-    this->c = std::make_unique<point<T>>(coordinats[2]);
-    return is;
-}
+// template<scalar_type T>
+// std::istream& operator>>(std::istream& is, triangle<T>& f) {
+//     point<T> coordinats[3];
+//     is >> coordinats[0] >> coordinats[1] >> coordinats[2];
+//     if(is.fail()) {
+//         throw std::invalid_argument("input fail");
+//     }
+//     this->a = std::make_unique<point<T>>(coordinats[0]);
+//     this->b = std::make_unique<point<T>>(coordinats[1]);
+//     this->c = std::make_unique<point<T>>(coordinats[2]);
+//     return is;
+// } 
 
-template<scalar_type T>
-std::ostream& operator<<(std::ostream& os, const triangle<T>& figure) {
-    os << "coordinates of triangle\n";
-    for(int i = 0; i < 3; ++i) {
-        os << figure.points[i];
-    }
-    os << *this->a << std::endl << *this->b << std::endl << *this->c << std::endl;
-    return os;
-}
+// template<scalar_type T>
+// std::ostream& operator<<(std::ostream& os, const triangle<T>& figure) {
+//     os << "coordinates of triangle\n";
+//     for(int i = 0; i < 3; ++i) {
+//         os << figure.points[i];
+//     }
+//     os << *this->a << std::endl << *this->b << std::endl << *this->c << std::endl;
+//     return os;
+// }

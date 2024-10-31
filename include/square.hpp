@@ -1,7 +1,7 @@
 #pragma once
-#include "../include/concept.hpp"
-#include "../include/point.hpp"
-#include "../include/figure.hpp"
+#include "concept.hpp"
+#include "point.hpp"
+#include "figure.hpp"
 #include <concepts>
 
 
@@ -19,11 +19,25 @@ class square : public figure<T>{
         point<T> get_center() const;
         operator double() const;
 
-        template <scalar_type C>
-        friend std::istream& operator>>(std::istream& is, square<C>& f);
-        friend std::ostream& operator<<(std::ostream& os, const square<C>& figure);
+        friend std::istream& operator>>(std::istream& is, square& f)
+        {
+            point<T> coordinats[4];
+            is >> coordinats[0] >> coordinats[1] >> coordinats[2] >> coordinats[3];
+            if(is.fail()) {
+                throw std::invalid_argument("input fail");
+            }
+            f = square<T>(coordinats[0], coordinats[1], coordinats[2], coordinats[3]);
+            return is;
+        }
 
-        bool valid_triangle() const;
+        friend std::ostream& operator<<(std::ostream& os, const square& figure)
+        {
+            os << "coordinates of square\n";
+            os << *figure.a << std::endl << *figure.b << std::endl << *figure.c << std::endl << *figure.d << std:: endl;
+            return os;
+        }
+
+        bool valid_square() const;
     private : 
         std::unique_ptr<point<T>> a;
         std::unique_ptr<point<T>> b;
@@ -38,7 +52,7 @@ static double distance1(const point<T>& p1, const point<T>& p2) {
 }
 
 template<scalar_type T>
-bool square<T>::valid_triangle() const { // y = kx + b
+bool square<T>::valid_square() const {
     double side_0_1 = distance1(*a, *b);
     double side_1_2 = distance1(*b, *c);
     double side_2_3 = distance1(*c, *d);
@@ -92,7 +106,7 @@ bool square<T>::operator==(const figure<T> &other_square) const {
     if(!trey) {
         return false;
     }
-    if(*this->a == *other_square.a && *this->b == *other_square.b && *this->c == *other_square.c && *this->d = *other_square.d) {
+    if(*a == *other_square.a && *b == *other_square.b && *c == *other_square.c && *d = *other_square.d) {
         return true;
     }
     return false;
@@ -106,38 +120,38 @@ void square<T>::get_points_of_figure() const{
 
 template<scalar_type T>
 point<T> square<T>::get_center() const{
-    double x_centre = (*this->a._x + *this->c._x) / 2;
-    double y_centre = (*this->a._y + *this->c._y) / 2;
+    double x_centre = (a->_x + c->_x) / 2;
+    double y_centre = (a->_y + c->_y) / 2;
 
     return point<T>{x_centre, y_centre};
 }
 
 template <scalar_type T>
 square<T>::operator double() const {
-    double storona1 = sqrt(pow(*this->a._x - *this->b._x, 2) + pow(*this->a._y - *this->b._y, 2));
+    double storona1 = sqrt(pow(a->_x - b->_x, 2) + pow(a->_y - b->_y, 2));
     return storona1 * storona1;
 }
 
-template<scalar_type T>
-std::istream& operator>>(std::istream& is, square<T>& f) {
-    point<T> coordinats[4];
-    is >> coordinats[0] >> coordinats[1] >> coordinats[2] >> coordinats[3];
-    if(is.fail()) {
-        throw std::invalid_argument("input fail");
-    }
-    this->a = std::make_unique<point<T>>(coordinats[0]);
-    this->b = std::make_unique<point<T>>(coordinats[1]);
-    this->c = std::make_unique<point<T>>(coordinats[2]);
-    this->d = std::make_unique<point<T>>(coordinats[3]);
-    return is;
-}
+// template<scalar_type T>
+// std::istream& operator>>(std::istream& is, square<T>& f) {
+//     point<T> coordinats[4];
+//     is >> coordinats[0] >> coordinats[1] >> coordinats[2] >> coordinats[3];
+//     if(is.fail()) {
+//         throw std::invalid_argument("input fail");
+//     }
+//     a = std::make_unique<point<T>>(coordinats[0]);
+//     b = std::make_unique<point<T>>(coordinats[1]);
+//     c = std::make_unique<point<T>>(coordinats[2]);
+//     d = std::make_unique<point<T>>(coordinats[3]);
+//     return is;
+// }
 
-template<scalar_type T>
-std::ostream& operator<<(std::ostream& os, const square<T>& figure) {
-    os << "coordinates of square\n";
-    for(int i = 0; i < 4; ++i) {
-        os << figure.points[i];
-    }
-    os << *this->a << std::endl << *this->b << std::endl << *this->c << std::endl << *this->d << std:: endl;
-    return os;
-}
+// template<scalar_type T>
+// std::ostream& operator<<(std::ostream& os, const square<T>& figure) {
+//     os << "coordinates of square\n";
+//     for(int i = 0; i < 4; ++i) {
+//         os << figure.points[i];
+//     }
+//     os << *a << std::endl << *b << std::endl << *c << std::endl << *d << std:: endl;
+//     return os;
+// }
