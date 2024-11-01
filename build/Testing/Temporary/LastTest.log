@@ -1,0 +1,55 @@
+Start testing: Oct 31 17:13 MSK
+----------------------------------------------------------
+1/1 Testing: MyProjectTests
+1/1 Test: MyProjectTests
+Command: "/home/timurnogaev/unix-shell-and-utils-TimurN4/OOP/build/MyProjectTests"
+Directory: /home/timurnogaev/unix-shell-and-utils-TimurN4/OOP/build
+"MyProjectTests" start time: Oct 31 17:13 MSK
+Output:
+----------------------------------------------------------
+[==========] Running 10 tests from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 10 tests from ArrayTest
+[ RUN      ] ArrayTest.DefaultConstructor
+[       OK ] ArrayTest.DefaultConstructor (0 ms)
+[ RUN      ] ArrayTest.ConstructorWithSize
+[       OK ] ArrayTest.ConstructorWithSize (0 ms)
+[ RUN      ] ArrayTest.AddElement
+[       OK ] ArrayTest.AddElement (0 ms)
+[ RUN      ] ArrayTest.RemoveLastElement
+[       OK ] ArrayTest.RemoveLastElement (0 ms)
+[ RUN      ] ArrayTest.RemoveAtIndex
+[       OK ] ArrayTest.RemoveAtIndex (0 ms)
+[ RUN      ] ArrayTest.GetSize
+[       OK ] ArrayTest.GetSize (0 ms)
+[ RUN      ] ArrayTest.GetCapacity
+[       OK ] ArrayTest.GetCapacity (0 ms)
+[ RUN      ] ArrayTest.CommonArea
+/home/timurnogaev/unix-shell-and-utils-TimurN4/OOP/test/test.cpp:84: Failure
+Expected equality of these values:
+  arr.common_area()
+    Which is: 0.5
+  0.5
+[  FAILED  ] ArrayTest.CommonArea (0 ms)
+[ RUN      ] ArrayTest.OperatorBrackets
+[       OK ] ArrayTest.OperatorBrackets (0 ms)
+[ RUN      ] ArrayTest.Print
+[       OK ] ArrayTest.Print (0 ms)
+[----------] 10 tests from ArrayTest (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 10 tests from 1 test suite ran. (0 ms total)
+[  PASSED  ] 9 tests.
+[  FAILED  ] 1 test, listed below:
+[  FAILED  ] ArrayTest.CommonArea
+
+ 1 FAILED TEST
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Failed.
+"MyProjectTests" end time: Oct 31 17:13 MSK
+"MyProjectTests" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: Oct 31 17:13 MSK
